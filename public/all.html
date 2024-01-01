@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  
+<style>
+/* Title styles */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 36px;
+    color: #b3c2cc;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Split the window vertically */
+.container {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 40px); /* Adjust for the title's height and margin */
+}
+
+.left-side {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.right-side {
+    flex: 1;
+    padding: 20px;
+    background-color: #b59e43;
+}
+
+body {
+    background-color: #041810; /* Choose your desired background color */
+    margin: 0;
+    font-family: Arial, sans-serif; /* Example font-family */
+}
+
+</style>
+
+</head>
+  <body>
+    <h1>Data Selfie Application</h1>
+
+    <div class="container">
+        <div class="left-side">
+            <!-- Your dynamically created elements will be appended here -->
+        </div>
+        <div class="right-side">
+            <!-- Content for the right side -->
+            <h2>This is YOU!</h2>
+            <p>This is the content you want to display on the right side.</p>
+            <!-- Add more content here -->
+        </div>
+    </div>
+    
+
+    <script>
+
+
+        getData()
+        async function getData() {
+            const response = await fetch('/api');
+            const data = await response.json();
+
+
+            /*
+            for (item of data){
+                const root = document.createElement('div');
+                const geo = document.createElement('div');
+                const date = document.createElement('div');
+                
+                geo.textContent = `${item.lat}°, ${item.lon}°`;
+                const dataString = new Date(item.timestamp).toLocaleString();
+                date.textContent = dataString;
+                
+                root.append(geo, date);
+                document.body.append(root);
+            }
+            */
+            const leftSide = document.querySelector('.left-side');
+            for (item of data) {
+            const root = document.createElement('div');
+            root.classList.add('item');
+
+            const geo = document.createElement('div');
+            geo.classList.add('geo');
+
+            const date = document.createElement('div');
+            date.classList.add('date');
+
+            geo.textContent = `${item.lat}°, ${item.lon}°`;
+            const dataString = new Date(item.timestamp).toLocaleString();
+            date.textContent = dataString;
+            
+            root.append(geo, date);
+            
+            //document.body.append(root);
+            leftSide.append(root); // Append to the left side
+            }
+            console.log(data);
+        
+                    // Create a style element
+            const style = document.createElement('style');
+
+            // Set the CSS rules
+            /* Styles for the dynamically created elements */
+            style.textContent = 
+                `
+            .item {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                background-color: #f9f9f9;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .item:hover {
+                transform: scale(1.02);
+            }
+
+            .geo {
+                font-weight: bold;
+                color: #3498db;
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+
+            .date {
+                color: #555;
+                font-style: italic;
+                font-size: 14px;
+            }`
+
+// Append the style element to the head of the document
+        document.head.appendChild(style);
+        }
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Hello</title>
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""
+  ></script>
+  <style>
+    #myMap {
+      height: 180px;
+    }
+  </style>
+  
+  
+  
+  </head>
+  <body>
+
+    <div id="myMap"></div>
+
+    <script>
+
+      const mymap = L.map('myMap').setView([0, 0], 1);
+      const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+      const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      const tiles = L.tileLayer(tileUrl, { attribution });
+      tiles.addTo(mymap);
+
+      //Making the marker
+      const myIcon = L.icon({
+        iconUrl: 'iss200.png',
+        iconSize: [50, 32],
+        iconAnchor: [25, 16]
+      });
+
+      const marker = L.marker([0, 0], { icon: myIcon }).addTo(mymap);
+
+      function putMarker(latitude, longitude) {
+        marker.setLatLng([latitude, longitude]);
+        
+      }
+
+
+      // the data we're goint to post
+      let data = {};
+
+      
+      let options = {};
+            
+      if('geolocation' in navigator) {
+        console.log('geolocation available');
+        navigator.geolocation.getCurrentPosition(
+          async position => {
+            const lon = position.coords.longitude;
+            const lat = position.coords.latitude;
+            document.getElementById("latitude").textContent = lat;
+            document.getElementById("longitude").textContent = lon;
+            putMarker(lat, lon);
+            //center map
+            mymap.setView([lat, lon], 20);
+            
+            // the data we're goint to post
+            //const data = { lat, lon};
+            data = { lat, lon};
+            // using fetch to do POST request
+            
+            options = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            };
+            /*
+            const response = await fetch('/api', options);
+            const dt = await response.json();
+            console.log(dt);
+            */
+
+          }
+        )
+      } else {
+        console.log('geolocation not available');
+      }
+    
+    
+
+
+    </script>
+
+
+    <h1>Data Selfie App</h1>
+    <p>Hello!</p>
+
+    <script>
+    async function sendData(data) {
+      
+      try {
+        
+        const response = await fetch('/api', options )
+        const dt = await response.json();
+        console.log(dt);
+        
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    </script>
+
+ <button id='foo\bar' type="button">Coronel! Here are my coordinates</button>
+    
+    <script> 
+
+function loadTableData(items) {
+        const table = document.getElementById("logs");
+        for(let i = 1; i <= 10 && i < items.length; i++) {
+          let item = items[i]
+          
+          let row = table.insertRow();
+
+          let timeStamp = row.insertCell(0);
+          timeStamp.innerHTML = item.timestamp;
+
+          let lat = row.insertCell(1);
+          lat.innerHTML = item.lat;
+
+          let lon = row.insertCell(2);
+          lon.innerHTML = item.lon;
+        };
+      }
+
+      async function get_db(){
+        const response = await fetch('/logs');
+        const db = await response.json();
+        loadTableData(db)
+        console.log("HOLA, estoy vivo")
+      }
+
+
+    const send = document.querySelector("#foo\\\\bar");
+    send.addEventListener("click", sendData);
+    </script>
+ 
+      <p>
+      latitude: <span id="latitude"></span>&deg;<br />
+      longitude: <span id="longitude"></span>&deg;<br />
+    </p>
+
+    <h1>LOGS</h1>
+    <table id="myTable" class="table table-borderless table-striped table-earning">
+      <thead>
+        <tr>
+          <th>timeStamp</th>
+          <th>latitude</th>
+          <th>longitude</th>
+        </tr>
+      </thead>
+      <tbody id="logs"></tbody>
+    </table>
+    <script>
+      get_db()
+    </script>
+    
+    <div><a href="chao.html">Go to Chao!</a> </div>
+  </body>
+</html>
